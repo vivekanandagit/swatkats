@@ -1,5 +1,4 @@
 const recorder = require('node-record-lpcm16');
-const axios = require('axios')
 const { IncomingWebhook } = require('@slack/webhook');
 
 // Imports the Google Cloud client library
@@ -7,14 +6,14 @@ const speech = require('@google-cloud/speech');
 
 // Creates a client
 const client = new speech.SpeechClient();
-const url = "https://hooks.slack.com/services/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";
+const url = "https://hooks.slack.com/services/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";
  
 const webhook = new IncomingWebhook(url);
  
 var text;
 const encoding = 'LINEAR16';
 const sampleRateHertz = 16000;
-const languageCode = 'en-US';
+const languageCode = 'en-IN';
 
 const request = {
   config: {
@@ -39,9 +38,14 @@ const recognizeStream = client
     && `${data.results[0].alternatives[0].transcript}\n`;
     // Send the notification
         (async () => {
+            try{
             await webhook.send({
             text: text,
             });
+        }
+        catch(err){
+            console.log(err)
+        }
         })();
   }
   );
@@ -62,3 +66,4 @@ recorder
   .pipe(recognizeStream);
 
 console.log('Listening, press Ctrl+C to stop.');
+
